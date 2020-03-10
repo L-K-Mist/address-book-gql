@@ -13,21 +13,16 @@
     <v-content>
       <AddressBook />
       <ContactForm />
-      <v-dialog
-        v-model="askName"
-        max-width="500px"
-        transition="dialog-transition"
-      >
+      <v-dialog v-model="askName" max-width="500px" transition="dialog-transition">
         <v-card>
-          <v-card-title class="headline">
-            Good day, I have no current record of you. Who are you?
-          </v-card-title>
+          <v-card-title class="headline">Good day, I have no current record of you. Who are you?</v-card-title>
           <v-card-text>
             <p>
               I don't have your name saved in local storage yet. Please add it
               here, then I can feed you your own contacts and not someone
               else's. Sort of like how you don't visit
-              <i>The</i> Facebook, but rather you visit <i>Your</i> Facebook.
+              <i>The</i> Facebook, but rather you visit
+              <i>Your</i> Facebook.
             </p>
 
             <v-form v-if="askName" @submit.prevent="saveUserLocally()">
@@ -50,9 +45,7 @@
                 ></v-text-field>
               </v-col>
               <br />
-              <v-btn block type="submit" color="success"
-                >Make Me the Issuer of All Queries</v-btn
-              >
+              <v-btn block type="submit" color="success">Make Me the Issuer of All Queries</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -64,9 +57,6 @@
 <script>
 import AddressBook from "./components/AddressBook";
 import ContactForm from "./components/ContactForm";
-import { APP_USERS } from "./gql/queries";
-
-import apollo from "./apollo";
 
 export default {
   name: "App",
@@ -103,8 +93,6 @@ export default {
         this.userFirstname + this.userLastname
       );
     }
-    console.log("mounted -> localname", localname);
-    this.fetchUsers();
   },
   methods: {
     saveUserLocally() {
@@ -119,16 +107,6 @@ export default {
         this.userFirstname + this.userLastname
       );
       this.askName = false; // Close the dialog.
-    },
-    async fetchUsers() {
-      try {
-        const response = await apollo.query({
-          query: APP_USERS
-        });
-        console.log("fetchUsers -> response", response);
-      } catch (error) {
-        console.log("TCL: getSchoolsKZN -> error", error);
-      }
     }
   }
 };
