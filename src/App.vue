@@ -20,6 +20,9 @@
 <script>
 import AddressBook from "./components/AddressBook";
 import ContactForm from "./components/ContactForm";
+import { APP_USERS } from "./gql/queries";
+
+import apollo from "./apollo";
 
 export default {
   name: "App",
@@ -31,6 +34,21 @@ export default {
 
   data: () => ({
     userName: "Dylan"
-  })
+  }),
+  mounted() {
+    this.fetchUsers();
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        const response = await apollo.query({
+          query: APP_USERS
+        });
+        console.log("fetchUsers -> response", response);
+      } catch (error) {
+        console.log("TCL: getSchoolsKZN -> error", error);
+      }
+    }
+  }
 };
 </script>
