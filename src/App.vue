@@ -19,10 +19,17 @@
         transition="dialog-transition"
       >
         <v-card>
-          <v-card-title class="headline">Who are you?</v-card-title>
+          <v-card-title class="headline">
+            Good day, I have no current record of you. Who are you?
+          </v-card-title>
           <v-card-text>
-            I don't have your name saved in local storage yet. Please add it
-            here, then I can feed you your own contacts and not someone else's.
+            <p>
+              I don't have your name saved in local storage yet. Please add it
+              here, then I can feed you your own contacts and not someone
+              else's. Sort of like how you don't visit
+              <i>The</i> Facebook, but rather you visit <i>Your</i> Facebook.
+            </p>
+
             <v-form v-if="askName" @submit.prevent="saveUserLocally()">
               <v-col cols="12">
                 <v-text-field
@@ -91,8 +98,11 @@ export default {
       this.userFirstname = names[0];
       this.userLastname = names[1];
       console.log("mounted -> names", names);
+      this.$store.dispatch(
+        "currentUserId",
+        this.userFirstname + this.userLastname
+      );
     }
-
     console.log("mounted -> localname", localname);
     this.fetchUsers();
   },
@@ -100,6 +110,15 @@ export default {
     saveUserLocally() {
       let fullname = this.userFirstname + "&`#" + this.userLastname;
       localStorage.setItem("fullname", fullname);
+      this.$store.dispatch("createUser", {
+        firstname: this.userFirstname,
+        lastname: this.userLastname
+      });
+      this.$store.dispatch(
+        "currentUserId",
+        this.userFirstname + this.userLastname
+      );
+      this.askName = false; // Close the dialog.
     },
     async fetchUsers() {
       try {
