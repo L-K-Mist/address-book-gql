@@ -9,15 +9,22 @@
         </h1>
       </div>
       <v-spacer></v-spacer>
-      <v-btn flat color="primary">
+      <v-btn @click="removeUser()" text>
+        <span class="mr-2">Clear User from Local Storage</span>
+        <v-icon>fa-sign-out</v-icon>
+      </v-btn>
+      <!-- <v-btn flat color="primary">
         <h3 class="mr-4">Clear User from Local Storage</h3>
         &nbsp;
         <v-icon>fa-sign-out</v-icon>
-      </v-btn>
+      </v-btn>-->
     </v-app-bar>
     <v-content>
       <AddressBook />
       <ContactForm />
+      <v-card>
+        <ContactsList />
+      </v-card>
       <v-dialog
         v-model="askName"
         max-width="500px"
@@ -34,6 +41,7 @@
               here, then I can feed you your own contacts and not someone
               else's.
             </p>
+            <p>(Jone Dane, has some contacts already)</p>
 
             <v-form v-if="askName" @submit.prevent="saveUserLocally()">
               <v-col cols="12">
@@ -55,7 +63,7 @@
                 ></v-text-field>
               </v-col>
               <br />
-              <v-btn block type="submit" color="success"
+              <v-btn block type="submit" color="accent"
                 >Make Me the Issuer of All Queries</v-btn
               >
             </v-form>
@@ -69,13 +77,15 @@
 <script>
 import AddressBook from "./components/AddressBook";
 import ContactForm from "./components/ContactForm";
+import ContactsList from "./components/ContactsList";
 
 export default {
   name: "App",
 
   components: {
     AddressBook,
-    ContactForm
+    ContactForm,
+    ContactsList
   },
 
   data: () => ({
@@ -106,6 +116,7 @@ export default {
         "currentUserId",
         this.userFirstname + this.userLastname
       );
+      this.$store.dispatch("fetchContacts"); // Moved this dispatch call out of the currentUserId action, because when we removeUser() here, we update the currentUserId to null and don't want to fetchContacts.
       this.askName = false; // Close the dialog.
     },
     newVisitorOrNot() {
@@ -123,7 +134,13 @@ export default {
           "currentUserId",
           this.userFirstname + this.userLastname
         ); // Now all calls to the contacts table will only deal with results tied to this user.
+        this.$store.dispatch("fetchContacts");
       }
+    },
+    removeUser() {
+      localStorage.removeItem("fullname");
+      this.$store.dispatch("currentUserId", null);
+      this.askName = true;
     }
   }
 };

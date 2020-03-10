@@ -13,15 +13,17 @@ export const APP_USERS = gql`
 // TODO test this after create user Dylan van den Bosch
 export const MY_CONTACTS = gql`
   query UserContacts($userId: String!) {
-    app_users(where: { id: { _eq: $userId } }) {
-      user_contacts {
-        firstname
+    user_contacts(where: { user_id: { _eq: $userId } }) {
+      firstname
+      lastname
+      id
+      contact_emails {
         id
-        lastname
-        contact_emails {
-          email
-          id
-        }
+        email
+      }
+      contact_phones {
+        id
+        phone_number
       }
     }
   }

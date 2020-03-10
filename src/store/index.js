@@ -8,20 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentUserId: null,
-    activeContact: {
-      firstName: "Mike",
-      lastName: "Schutte",
-      emails: ["mike@schutte.com", "mike@schutte.co.za", "mike@schutte.org"],
-      phoneNumbers: ["0833446552", "0833446551"]
-    },
-    contacts: [
-      {
-        firstName: "Mike",
-        lastName: "Schutte",
-        emails: ["mike@schutte.com", "mike@schutte.co.za", "mike@schutte.org"],
-        phoneNumbers: ["0833446552", "0833446551"]
-      }
-    ]
+    activeContact: null,
+    contacts: null
   },
   mutations: {
     currentUserId(state, payload) {
@@ -30,12 +18,12 @@ export default new Vuex.Store({
     },
     contacts(state, payload) {
       state.contacts = payload;
+      console.log("contacts -> state.contacts", state.contacts);
     }
   },
   actions: {
-    currentUserId({ commit, dispatch }, payload) {
+    currentUserId({ commit }, payload) {
       commit("currentUserId", payload);
-      dispatch("fetchContacts");
     },
     // eslint-disable-next-line no-empty-pattern
     async createUser({ commit }, payload) {
@@ -56,10 +44,11 @@ export default new Vuex.Store({
         });
         console.log("createUser -> response", response);
       } catch (error) {
-        console.log("createUser -> error", error);
         if (error.message.includes("Uniqueness violation")) {
           alert(`Welcome Back, ${firstname}`);
           commit("currentUserId", id); // We now know that this is an existing user, so we can use this id for getting the right contacts.
+        } else {
+          console.error("createUser -> error", error);
         }
       }
     },
@@ -70,7 +59,7 @@ export default new Vuex.Store({
           variables: { userId: state.currentUserId }
         });
         console.log("fetchContacts -> response", response.data);
-        commit("contacts", response.data);
+        commit("contacts", response.data.user_contacts);
       } catch (error) {
         console.log("fetchContacts -> error", error);
       }
