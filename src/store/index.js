@@ -58,9 +58,9 @@ export default new Vuex.Store({
       } catch (error) {
         console.log("createUser -> error", error);
         if (error.message.includes("Uniqueness violation")) {
-          alert(`Welcome Back, ${payload.firstname}`);
+          alert(`Welcome Back, ${firstname}`);
+          commit("currentUserId", id); // We now know that this is an existing user, so we can use this id for getting the right contacts.
         }
-        commit("currentUserId", payload);
       }
     },
     async fetchContacts({ commit, state }) {
