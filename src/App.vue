@@ -12,18 +12,21 @@
     </v-app-bar>
     <v-content>
       <AddressBook />
+      <ContactForm />
     </v-content>
   </v-app>
 </template>
 
 <script>
 import AddressBook from "./components/AddressBook";
+import ContactForm from "./components/ContactForm";
 
 export default {
   name: "App",
 
   components: {
-    AddressBook
+    AddressBook,
+    ContactForm
   },
 
   data: () => ({
