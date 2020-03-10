@@ -30,45 +30,7 @@
         max-width="500px"
         transition="dialog-transition"
       >
-        <v-card>
-          <v-card-title class="headline"
-            >Good day, I have no current record of you. Who are
-            you?</v-card-title
-          >
-          <v-card-text>
-            <p>
-              I don't have your name saved in local storage yet. Please add it
-              here, then I can feed you your own contacts and not someone
-              else's.
-            </p>
-            <p>(Jone Dane, has some contacts already)</p>
-
-            <v-form v-if="askName" @submit.prevent="saveUserLocally()">
-              <v-col cols="12">
-                <v-text-field
-                  v-model="userFirstname"
-                  :rules="nameRules"
-                  :counter="10"
-                  label="First name"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="userLastname"
-                  :rules="lastnameRules"
-                  :counter="20"
-                  label="Last name"
-                  required
-                ></v-text-field>
-              </v-col>
-              <br />
-              <v-btn block type="submit" color="accent"
-                >Make Me the Issuer of All Queries</v-btn
-              >
-            </v-form>
-          </v-card-text>
-        </v-card>
+        <UserForm v-if="askName" @closeMe="askName = false" />
       </v-dialog>
     </v-content>
   </v-app>
@@ -77,6 +39,7 @@
 <script>
 import AddressBook from "./components/AddressBook";
 import ContactForm from "./components/ContactForm";
+import UserForm from "./components/UserForm";
 import ContactsList from "./components/ContactsList";
 
 export default {
@@ -85,40 +48,19 @@ export default {
   components: {
     AddressBook,
     ContactForm,
-    ContactsList
+    ContactsList,
+    UserForm
   },
 
   data: () => ({
-    userFirstname: "",
-    userLastname: "",
     askName: false,
-    nameRules: [
-      v => !!v || "Name is required",
-      v => v.length <= 10 || "Name must be less than 10 characters"
-    ],
-    lastnameRules: [
-      v => !!v || "Name is required",
-      v => v.length <= 20 || "Name must be less than 20 characters"
-    ]
+    userFirstname: "",
+    userLastname: ""
   }),
   mounted() {
     this.newVisitorOrNot();
   },
   methods: {
-    saveUserLocally() {
-      let fullname = this.userFirstname + "&`#" + this.userLastname;
-      localStorage.setItem("fullname", fullname);
-      this.$store.dispatch("createUser", {
-        firstname: this.userFirstname,
-        lastname: this.userLastname
-      });
-      this.$store.dispatch(
-        "currentUserId",
-        this.userFirstname + this.userLastname
-      );
-      this.$store.dispatch("fetchContacts"); // Moved this dispatch call out of the currentUserId action, because when we removeUser() here, we update the currentUserId to null and don't want to fetchContacts.
-      this.askName = false; // Close the dialog.
-    },
     newVisitorOrNot() {
       // If it's a returning visitor, pull their info from local storage and let store know who our current user is.
       // If there's nothing in local storage, get them to give us their first and last names.

@@ -11,9 +11,10 @@ const httpLink = new HttpLink({
 const errorLink = onError(
   ({ operation, response, graphQLErrors, networkError }) => {
     if (graphQLErrors) {
-      console.log("gqlError", {
-        graphQLErrors
-      });
+      // Can uncomment during Troubleshooting, although the try catch blocks are doing a good job so far.
+      // console.log("gqlError", {
+      //   graphQLErrors
+      // });
     }
     if (networkError) {
       console.log({
