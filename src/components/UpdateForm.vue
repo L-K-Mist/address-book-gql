@@ -126,16 +126,15 @@ export default {
     },
     async saveContact() {
       const { firstname, lastname, emails, phones } = this;
-      let success = await this.$store.dispatch("updateContact", {
+      await this.$store.dispatch("updateContact", {
         firstname,
         lastname,
         emails,
         phones,
         id: this.contact.id
       });
-      if (success) {
-        this.$emit("closeMe");
-      }
+
+      this.$emit("closeMe");
     }
   }
 };
