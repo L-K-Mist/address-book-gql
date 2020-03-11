@@ -13,22 +13,14 @@
         <span class="mr-2">Clear User from Local Storage</span>
         <v-icon>fa-sign-out</v-icon>
       </v-btn>
-      <!-- <v-btn flat color="primary">
-        <h3 class="mr-4">Clear User from Local Storage</h3>
-        &nbsp;
-        <v-icon>fa-sign-out</v-icon>
-      </v-btn>-->
     </v-app-bar>
     <v-content>
-      <AddressBook />
-      <ContactForm />
-      <v-card>
-        <ContactsList />
-      </v-card>
+      <ContactsList />
       <v-dialog
         v-model="askName"
         max-width="500px"
         transition="dialog-transition"
+        persistent
       >
         <UserForm v-if="askName" @closeMe="askName = false" />
       </v-dialog>
@@ -37,8 +29,6 @@
 </template>
 
 <script>
-import AddressBook from "./components/AddressBook";
-import ContactForm from "./components/ContactForm";
 import UserForm from "./components/UserForm";
 import ContactsList from "./components/ContactsList";
 
@@ -46,8 +36,6 @@ export default {
   name: "App",
 
   components: {
-    AddressBook,
-    ContactForm,
     ContactsList,
     UserForm
   },
@@ -87,3 +75,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.v-content {
+  background-color: hsla(0, 0%, 95%, 1);
+}
+</style>
