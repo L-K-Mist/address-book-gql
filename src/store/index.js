@@ -64,6 +64,20 @@ export default new Vuex.Store({
         console.log("fetchContacts -> error", error);
       }
     }
+    /**
+    This is the sort of user-object that the GQL wants:
+    {firstname: "Full", lastname: "Person", 
+      contact_emails: {data: [{email: "one@email.com"}, {email: "two@email.com"}]},
+      contact_phones: {data: [{phone_number: "111"}, {phone_number: "222"}]}, user_id: "JoneDane"}
+     */
+
+    // async saveContact({ commit }, payload) {
+    //   const { firstname, lastname, emails, phones } = payload;
+    //   const user = {
+    //     firstname,
+    //     lastname
+    //   };
+    // }
   },
   modules: {}
 });
