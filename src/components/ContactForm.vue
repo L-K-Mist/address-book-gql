@@ -107,7 +107,7 @@ export default {
         email: null
       }
     ],
-    phones: [{ phoneNumber: null }]
+    phones: [{ phone_number: null }]
   }),
   methods: {
     addEmailField() {
