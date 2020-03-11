@@ -87,7 +87,10 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <v-dialog v-model="editDialog" width="500">
-            <UpdateForm :contact="activeContact" />
+            <UpdateForm
+              @closeMe="editDialog = false"
+              :contact="activeContact"
+            />
           </v-dialog>
         </v-row>
       </v-card-text>
