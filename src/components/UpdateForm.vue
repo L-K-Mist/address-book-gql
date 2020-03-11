@@ -22,19 +22,10 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col
-            v-for="(email, index) in emails"
-            :key="`email` + index"
-            cols="12"
-            md="6"
-          >
+          <v-col v-for="(email, index) in emails" :key="`email` + index" cols="12" md="6">
             <v-row>
               <v-col cols="10">
-                <v-text-field
-                  v-model="email.email"
-                  :rules="emailRules"
-                  label="E-mail"
-                ></v-text-field>
+                <v-text-field v-model="email.email" label="E-mail"></v-text-field>
               </v-col>
               <v-col cols="2" class="field-button-wrapper">
                 <v-btn
@@ -51,18 +42,10 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col
-            v-for="(phone, index) in phones"
-            :key="`phone` + index"
-            cols="12"
-            md="6"
-          >
+          <v-col v-for="(phone, index) in phones" :key="`phone` + index" cols="12" md="6">
             <v-row>
               <v-col cols="10">
-                <v-text-field
-                  v-model="phone.phone_number"
-                  label="Phone"
-                ></v-text-field>
+                <v-text-field v-model="phone.phone_number" label="Phone"></v-text-field>
               </v-col>
               <v-col cols="2" class="field-button-wrapper">
                 <v-btn
@@ -102,7 +85,6 @@ export default {
       v => !!v || "Name is required",
       v => v.length <= 20 || "Name must be less than 20 characters"
     ],
-    emailRules: [v => /.+@.+/.test(v) || "E-mail must be valid"],
     emails: [
       {
         email: null

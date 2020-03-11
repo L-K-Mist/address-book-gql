@@ -4,6 +4,17 @@
       <v-card-title class="headline">
         Contacts List
         <v-spacer></v-spacer>
+        <v-btn
+          v-if="!filtered"
+          class="mr-3"
+          color="secondary"
+          @click="findContact = true"
+        >
+          <v-icon left>fa-search</v-icon>Find a Contact
+        </v-btn>
+        <v-btn class="mr-3" @click="filtered = false" v-else color="secondary">
+          <v-icon left>fa-address-book</v-icon>Show All Again
+        </v-btn>
         <v-btn color="accent" @click="addContact = true">
           <v-icon left>fa-plus</v-icon>Add a Contact
         </v-btn>
@@ -14,8 +25,20 @@
         >
           <ContactForm v-if="addContact" @closeMe="addContact = false" />
         </v-dialog>
+        <v-dialog
+          v-model="findContact"
+          max-width="720px"
+          transition="dialog-transition"
+        >
+          <SearchForm
+            v-if="findContact"
+            @closeMe="
+              findContact = false;
+              filtered = true;
+            "
+          />
+        </v-dialog>
       </v-card-title>
-
       <v-card-text>
         <v-row justify="center">
           <v-expansion-panels v-model="panel" popout>
@@ -101,18 +124,23 @@
 <script>
 import ContactForm from "../components/ContactForm";
 import UpdateForm from "../components/UpdateForm";
+import SearchForm from "../components/SearchForm";
 export default {
   data() {
     return {
       panel: null, // Represents the index value of the selected expansion-panel
       addContact: false,
+      findContact: false,
+      filtered: false,
       editDialog: false,
       activeContact: null
     };
   },
   computed: {
     contacts() {
-      return this.$store.state.contacts;
+      return this.filtered
+        ? this.$store.state.filteredContacts
+        : this.$store.state.contacts;
     }
   },
   methods: {
@@ -127,7 +155,8 @@ export default {
   },
   components: {
     ContactForm,
-    UpdateForm
+    UpdateForm,
+    SearchForm
   }
 };
 </script>

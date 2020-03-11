@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import apollo from "../apollo";
-import { MY_CONTACTS } from "../gql/queries";
+import { MY_CONTACTS, SEARCH_CONTACTS } from "../gql/queries";
 import { ADD_USER, ADD_CONTACT, DELETE_CONTACT } from "../gql/mutations";
 Vue.use(Vuex);
 
@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     currentUserId: null,
     activeContact: null,
-    contacts: null
+    contacts: null,
+    filteredContacts: null
   },
   mutations: {
     currentUserId(state, payload) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     contacts(state, payload) {
       state.contacts = payload;
       console.log("contacts -> state.contacts", state.contacts);
+    },
+    filteredContacts(state, payload) {
+      state.filteredContacts = payload;
     }
   },
   actions: {
@@ -64,13 +68,7 @@ export default new Vuex.Store({
         console.log("fetchContacts -> error", error);
       }
     },
-    /**
-    This is the sort of user-object that the GQL wants:
-    {firstname: "Full", lastname: "Person", 
-      contact_emails: {data: [{email: "one@email.com"}, {email: "two@email.com"}]},
-      contact_phones: {data: [{phone_number: "111"}, {phone_number: "222"}]}, user_id: "JoneDane"}
-     */
-    // eslint-disable-next-line no-empty-pattern
+
     async saveContact({ state, commit }, payload) {
       const { firstname, lastname, emails, phones } = payload;
       const user = {
@@ -153,6 +151,21 @@ export default new Vuex.Store({
         } catch (error) {
           console.log("saveContact -> error", error);
         }
+      }
+    },
+    // Saving this for next empty action
+    // eslint-disable-next-line no-empty-pattern
+    async searchContacts({ state, commit }, payload) {
+      try {
+        const response = await apollo.query({
+          query: SEARCH_CONTACTS,
+          variables: { userId: state.currentUserId, searchTerm: `%${payload}%` }
+        });
+        console.log("fetchContacts -> response", response.data);
+        commit("filteredContacts", response.data.user_contacts);
+        return true;
+      } catch (error) {
+        console.log("fetchContacts -> error", error);
       }
     }
   },

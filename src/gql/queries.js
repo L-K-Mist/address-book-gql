@@ -28,3 +28,33 @@ export const MY_CONTACTS = gql`
     }
   }
 `;
+
+export const SEARCH_CONTACTS = gql`
+  query Search($searchTerm: String!, $userId: String!) {
+    user_contacts(
+      where: {
+        _and: [
+          { user_id: { _eq: $userId } }
+          {
+            _or: [
+              { firstname: { _ilike: $searchTerm } }
+              { lastname: { _ilike: $searchTerm } }
+            ]
+          }
+        ]
+      }
+    ) {
+      firstname
+      lastname
+      id
+      contact_emails {
+        email
+        id
+      }
+      contact_phones {
+        id
+        phone_number
+      }
+    }
+  }
+`;
