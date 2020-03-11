@@ -124,15 +124,17 @@ export default new Vuex.Store({
       let deleted = await dispatch("deleteContact", payload.id);
       if (deleted) {
         const { firstname, lastname, emails, phones, id } = payload;
+        let whole_emails = emails.filter(item => item.email !== "");
+        let whole_numbers = phones.filter(item => item.phone_number !== "");
         const user = {
           id,
           firstname,
           lastname,
           contact_phones: {
-            data: phones
+            data: whole_numbers
           },
           contact_emails: {
-            data: emails
+            data: whole_emails
           },
           user_id: state.currentUserId
         };
