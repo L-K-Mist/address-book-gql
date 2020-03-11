@@ -80,7 +80,7 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-btn type="submit" block color="success">Save this Contact</v-btn>
+        <v-btn type="submit" block color="success">Update this Contact</v-btn>
       </v-container>
     </v-form>
   </v-card>
@@ -88,6 +88,7 @@
 
 <script>
 export default {
+  props: ["contact"],
   data: () => ({
     valid: false,
     firstname: "",
@@ -109,6 +110,13 @@ export default {
     ],
     phones: [{ phone_number: null }]
   }),
+  mounted() {
+    console.log(this.contact);
+    this.firstname = this.contact.firstname;
+    this.lastname = this.contact.lastname;
+    this.emails = this.contact.contact_emails;
+    this.phones = this.contact.contact_phones;
+  },
   methods: {
     addEmailField() {
       this.emails.push({ email: null });
@@ -118,11 +126,12 @@ export default {
     },
     async saveContact() {
       const { firstname, lastname, emails, phones } = this;
-      let success = await this.$store.dispatch("saveContact", {
+      let success = await this.$store.dispatch("updateContact", {
         firstname,
         lastname,
         emails,
-        phones
+        phones,
+        id: this.contact.id
       });
       if (success) {
         this.$emit("closeMe");

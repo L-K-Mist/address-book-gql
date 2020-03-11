@@ -75,12 +75,19 @@
                     class="mr-2"
                     color="accent"
                     @click="deleteContact(contact)"
-                    >Delete<v-icon right>fa-trash</v-icon></v-btn
                   >
+                    Delete
+                    <v-icon right>fa-trash</v-icon>
+                  </v-btn>
 
-                  <v-btn color="primary"
-                    ><v-icon left>fa-edit</v-icon> Edit</v-btn
-                  >
+                  <v-dialog v-model="editDialog" width="500">
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" color="primary">
+                        <v-icon left>fa-edit</v-icon>Edit
+                      </v-btn>
+                    </template>
+                    <UpdateForm :contact="contact" />
+                  </v-dialog>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -93,11 +100,13 @@
 
 <script>
 import ContactForm from "../components/ContactForm";
+import UpdateForm from "../components/UpdateForm";
 export default {
   data() {
     return {
       panel: null, // Represents the index value of the selected expansion-panel
-      addContact: false
+      addContact: false,
+      editDialog: false
     };
   },
   computed: {
@@ -112,7 +121,8 @@ export default {
     }
   },
   components: {
-    ContactForm
+    ContactForm,
+    UpdateForm
   }
 };
 </script>

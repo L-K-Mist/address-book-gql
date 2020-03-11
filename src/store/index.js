@@ -113,8 +113,44 @@ export default new Vuex.Store({
         const currentContacts =
           response.data.delete_user_contacts.returning[0].user.user_contacts;
         commit("contacts", currentContacts);
+        return true; // So that other actions (like updateContact) can know when this is resolved.
       } catch (error) {
         console.log("saveContact -> error", error);
+      }
+    },
+
+    async updateContact({ dispatch, commit, state }, payload) {
+      console.log("updateContact -> payload", payload);
+      let deleted = await dispatch("deleteContact", payload.id);
+      if (deleted) {
+        const { firstname, lastname, emails, phones, id } = payload;
+        const user = {
+          id,
+          firstname,
+          lastname,
+          contact_phones: {
+            data: phones
+          },
+          contact_emails: {
+            data: emails
+          },
+          user_id: state.currentUserId
+        };
+        try {
+          const response = await apollo.mutate({
+            mutation: ADD_CONTACT,
+            variables: {
+              user
+            }
+          });
+          const currentContacts =
+            response.data.insert_user_contacts.returning[0].user.user_contacts;
+
+          commit("contacts", currentContacts);
+          return true;
+        } catch (error) {
+          console.log("saveContact -> error", error);
+        }
       }
     }
   },
