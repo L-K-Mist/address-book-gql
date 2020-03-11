@@ -71,7 +71,7 @@ export default new Vuex.Store({
       contact_phones: {data: [{phone_number: "111"}, {phone_number: "222"}]}, user_id: "JoneDane"}
      */
     // eslint-disable-next-line no-empty-pattern
-    async saveContact({}, payload) {
+    async saveContact({ state, commit }, payload) {
       const { firstname, lastname, emails, phones } = payload;
       const user = {
         firstname,
@@ -81,7 +81,8 @@ export default new Vuex.Store({
         },
         contact_phones: {
           data: phones
-        }
+        },
+        user_id: state.currentUserId
       };
       try {
         const response = await apollo.mutate({
@@ -90,13 +91,16 @@ export default new Vuex.Store({
             user
           }
         });
-        console.log("fetchContacts -> response", response.data);
+        const currentContacts =
+          response.data.insert_user_contacts.returning[0].user.user_contacts;
+
+        commit("contacts", currentContacts);
+        return true;
       } catch (error) {
         console.log("saveContact -> error", error);
       }
     },
-    // eslint-disable-next-line no-empty-pattern
-    async deleteContact({}, payload) {
+    async deleteContact({ commit }, payload) {
       console.log("deleteContact -> payload", payload);
       try {
         const response = await apollo.mutate({
@@ -106,6 +110,9 @@ export default new Vuex.Store({
           }
         });
         console.log("fetchContacts -> response", response.data);
+        const currentContacts =
+          response.data.delete_user_contacts.returning[0].user.user_contacts;
+        commit("contacts", currentContacts);
       } catch (error) {
         console.log("saveContact -> error", error);
       }

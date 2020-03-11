@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline">Let's Add a New Contact</v-card-title>
+    <v-card-title class="headline">Let's Update Your Contact</v-card-title>
     <v-form @submit.prevent="saveContact()" v-model="valid">
       <v-container class="pa-3">
         <v-row>
