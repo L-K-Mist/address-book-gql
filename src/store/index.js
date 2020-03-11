@@ -109,7 +109,7 @@ export default new Vuex.Store({
             id: payload
           }
         });
-        console.log("fetchContacts -> response", response.data);
+        console.log("deleteContact -> response", response.data);
         const currentContacts =
           response.data.delete_user_contacts.returning[0].user.user_contacts;
         commit("contacts", currentContacts);

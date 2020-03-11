@@ -79,19 +79,16 @@
                     Delete
                     <v-icon right>fa-trash</v-icon>
                   </v-btn>
-
-                  <v-dialog v-model="editDialog" width="500">
-                    <template v-slot:activator="{ on }">
-                      <v-btn v-on="on" color="primary">
-                        <v-icon left>fa-edit</v-icon>Edit
-                      </v-btn>
-                    </template>
-                    <UpdateForm :contact="contact" />
-                  </v-dialog>
+                  <v-btn @click="editContact(contact)" color="primary">
+                    <v-icon left>fa-edit</v-icon>Edit
+                  </v-btn>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+          <v-dialog v-model="editDialog" width="500">
+            <UpdateForm :contact="activeContact" />
+          </v-dialog>
         </v-row>
       </v-card-text>
     </v-card>
@@ -106,7 +103,8 @@ export default {
     return {
       panel: null, // Represents the index value of the selected expansion-panel
       addContact: false,
-      editDialog: false
+      editDialog: false,
+      activeContact: null
     };
   },
   computed: {
@@ -118,6 +116,10 @@ export default {
     deleteContact(contact) {
       console.log("deleteContact -> contact", contact);
       this.$store.dispatch("deleteContact", contact.id);
+    },
+    editContact(contact) {
+      this.activeContact = contact;
+      this.editDialog = true;
     }
   },
   components: {
