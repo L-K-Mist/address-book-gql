@@ -69,13 +69,23 @@
                     </v-slide-item>
                   </v-slide-group>
                 </v-sheet>
+                <br />
+                <v-row justify="center">
+                  <v-btn
+                    class="mr-2"
+                    color="accent"
+                    @click="deleteContact(contact)"
+                    >Delete<v-icon right>fa-trash</v-icon></v-btn
+                  >
+
+                  <v-btn color="primary"
+                    ><v-icon left>fa-edit</v-icon> Edit</v-btn
+                  >
+                </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-row>
-        <div v-for="contact in contacts" :key="contact.id">
-          {{ contact.firstname }} {{ contact.lastname }}
-        </div>
       </v-card-text>
     </v-card>
   </v-container>
@@ -93,6 +103,12 @@ export default {
   computed: {
     contacts() {
       return this.$store.state.contacts;
+    }
+  },
+  methods: {
+    deleteContact(contact) {
+      console.log("deleteContact -> contact", contact);
+      this.$store.dispatch("deleteContact", contact.id);
     }
   },
   components: {

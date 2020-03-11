@@ -53,14 +53,14 @@
           </v-col>
           <v-col
             v-for="(phone, index) in phones"
-            :key="phone.phoneNumber"
+            :key="phone.phone_number"
             cols="12"
             md="6"
           >
             <v-row>
               <v-col cols="10">
                 <v-text-field
-                  v-model="phone.phoneNumber"
+                  v-model="phone.phone_number"
                   label="Phone"
                 ></v-text-field>
               </v-col>
@@ -107,14 +107,14 @@ export default {
         email: null
       }
     ],
-    phones: [{ phoneNumber: null }]
+    phones: [{ phone_number: null }]
   }),
   methods: {
     addEmailField() {
       this.emails.push({ email: null });
     },
     addPhoneField() {
-      this.phones.push({ phoneNumber: null });
+      this.phones.push({ phone_number: null });
     },
     saveContact() {
       const { firstname, lastname, emails, phones } = this;
