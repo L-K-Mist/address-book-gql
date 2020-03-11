@@ -9,7 +9,10 @@
         I don't have your name saved in local storage yet. Please add it here,
         then I can feed you your own contacts and not someone else's.
       </p>
-      <p>(Jone Dane, has some contacts already)</p>
+      <p>
+        (Jone Dane, has some contacts already; and Mike Schutte has lots of
+        emails and phone numbers.)
+      </p>
 
       <v-form @submit.prevent="saveUserLocally()">
         <v-col cols="12">
